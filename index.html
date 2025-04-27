@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Video Gallery</title>
+  <title>Multi-Folder Video Gallery</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -42,11 +42,17 @@
 </div>
 
 <script>
-  const repoOwner = 'yomamamia';    // CHANGE THIS
-  const repoName = 'nfsw-gallery';     // CHANGE THIS
-  const folderPath = 'new 51' 'new 58';           // Folder with your videos
+  const repoOwner = 'yomamamia';    // <-- CHANGE THIS
+  const repoName = 'nfsw-gallery';     // <-- CHANGE THIS
 
-  async function loadVideos() {
+  // List all your video folders here:
+  const folderPaths = [
+    'new 51',
+    'new 58',
+    'more-videos',  // <-- add as many as you want
+  ];
+
+  async function loadVideosFromFolder(folderPath) {
     const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
     const res = await fetch(url);
     const files = await res.json();
@@ -66,7 +72,13 @@
     });
   }
 
-  loadVideos();
+  async function loadAllVideos() {
+    for (const folderPath of folderPaths) {
+      await loadVideosFromFolder(folderPath);
+    }
+  }
+
+  loadAllVideos();
 </script>
 
 </body>
