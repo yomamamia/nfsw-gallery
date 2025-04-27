@@ -7,18 +7,58 @@
 </head>
 <body>
     <h1>Welcome to the NSFW Gallery</h1>
-    <p>Here are the latest images and videos!</p>
+    <p>Here are the latest videos:</p>
 
-    <!-- Example Video -->
-    <video controls width="600">
-        <source src="new 51/[Reducing Mosaic]MKZ-051 Older Sister Of Big Is Bombshell In K-----g Obscenity Only By Seconds! ! Shiori Anzai - Supjav.com - Free JAV Streaming Online-00.00.37.487-00.00.58.099-seg01.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div id="video-gallery"></div>
 
-    <video controls width="600">
-        <source src="videos/video2.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <script>
+        // GitHub API URL for your repository files
+        const repoOwner = 'yomamamia';  // Replace with your GitHub username
+        const repoName = 'nfsw-gallery';  // Replace with your GitHub repository name
+        const folderPath = 'new 51/';  // Folder where your videos are stored
+
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
+
+        // Function to fetch video files from GitHub API and display them
+        async function loadVideos() {
+            try {
+                // Fetch the list of files from the GitHub API
+                const response = await fetch(apiUrl);
+                const files = await response.json();
+
+                // Check if the folder is empty
+                if (!Array.isArray(files)) {
+                    document.getElementById('video-gallery').innerHTML = 'No videos found.';
+                    return;
+                }
+
+                // Loop through each file and create a video element
+                files.forEach(file => {
+                    if (file.name.endsWith('.mp4')) { // Check if the file is an MP4 video
+                        const videoElement = document.createElement('video');
+                        videoElement.setAttribute('controls', 'controls');
+                        videoElement.setAttribute('width', '600');
+
+                        // Create the source tag and set the video URL from the file's download URL
+                        const sourceElement = document.createElement('source');
+                        sourceElement.setAttribute('src', file.download_url);
+                        sourceElement.setAttribute('type', 'video/mp4');
+
+                        // Append the source element to the video element
+                        videoElement.appendChild(sourceElement);
+
+                        // Append the video element to the page
+                        document.getElementById('video-gallery').appendChild(videoElement);
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading videos:', error);
+            }
+        }
+
+        // Load the videos when the page loads
+        window.onload = loadVideos;
+    </script>
 
 </body>
 </html>
