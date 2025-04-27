@@ -3,54 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NSFW Gallery</title>
+    <title>NSFW Video Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .video-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        video {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        video:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the NSFW Gallery</h1>
-    <p>Here are the latest videos:</p>
-
+    <h1>NSFW Video Gallery</h1>
+    
     <div id="video-gallery"></div>
 
     <script>
         // GitHub API URL for your repository files
         const repoOwner = 'yomamamia';  // Replace with your GitHub username
         const repoName = 'nfsw-gallery';  // Replace with your GitHub repository name
-        const folderPath = ['new 51/', 'new 58/'];  // Folder where your videos are stored
+        
+        // Folder paths for multiple video directories
+        const folders = ['new 51/', 'new 58/'];  // Add additional folders here as needed
 
-        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
-
-        // Function to fetch video files from GitHub API and display them
+        // Function to fetch video files from a GitHub folder and display them
         async function loadVideos() {
             try {
-                // Fetch the list of files from the GitHub API
-                const response = await fetch(apiUrl);
-                const files = await response.json();
+                // Iterate through each folder
+                for (let folderPath of folders) {
+                    // Create a section for each folder
+                    const section = document.createElement('div');
+                    section.classList.add('video-section');
 
-                // Check if the folder is empty
-                if (!Array.isArray(files)) {
-                    document.getElementById('video-gallery').innerHTML = 'No videos found.';
-                    return;
-                }
+                    // Section title (e.g., folder name)
+                    const sectionTitle = document.createElement('div');
+                    sectionTitle.classList.add('section-title');
+                    sectionTitle.innerHTML = folderPath.replace('/', '').toUpperCase() + ' Videos';
+                    section.appendChild(sectionTitle);
 
-                // Loop through each file and create a video element
-                files.forEach(file => {
-                    if (file.name.endsWith('.mp4')) { // Check if the file is an MP4 video
-                        const videoElement = document.createElement('video');
-                        videoElement.setAttribute('controls', 'controls');
-                        videoElement.setAttribute('width', '600');
+                    // Fetch the list of files from the GitHub API for the current folder
+                    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
+                    const response = await fetch(apiUrl);
+                    const files = await response.json();
 
-                        // Create the source tag and set the video URL from the file's download URL
-                        const sourceElement = document.createElement('source');
-                        sourceElement.setAttribute('src', file.download_url);
-                        sourceElement.setAttribute('type', 'video/mp4');
+                    // Check if the folder is empty
+                    if (!Array.isArray(files)) {
+                        section.innerHTML += 'No videos found in this folder.';
+                    } else {
+                        // Loop through each file and create a video element
+                        files.forEach(file => {
+                            if (file.name.endsWith('.mp4')) {  // Check if the file is an MP4 video
+                                const videoElement = document.createElement('video');
+                                videoElement.setAttribute('controls', 'controls');
+                                videoElement.setAttribute('width', '600');
 
-                        // Append the source element to the video element
-                        videoElement.appendChild(sourceElement);
+                                // Create the source tag and set the video URL from the file's download URL
+                                const sourceElement = document.createElement('source');
+                                sourceElement.setAttribute('src', file.download_url);
+                                sourceElement.setAttribute('type', 'video/mp4');
 
-                        // Append the video element to the page
-                        document.getElementById('video-gallery').appendChild(videoElement);
+                                // Append the source element to the video element
+                                videoElement.appendChild(sourceElement);
+
+                                // Append the video element to the section
+                                section.appendChild(videoElement);
+                            }
+                        });
                     }
-                });
+
+                    // Append the section to the gallery
+                    document.getElementById('video-gallery').appendChild(section);
+                }
             } catch (error) {
                 console.error('Error loading videos:', error);
             }
