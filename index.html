@@ -35,24 +35,21 @@
 
 <div class="gallery" id="gallery"></div>
 
+<!-- Import the auto-generated array -->
+<script src="photos-array.js"></script>
+
 <script>
   const gallery = document.getElementById('gallery');
 
-  // Automatically detect all images in the folder
-  // You must list them manually in an array since Cloudflare Pages is static
-  // But we can keep it minimal with a naming convention
-  const imageCount = 20; // approximate max number of images, adjust if needed
-  for (let i = 1; i <= imageCount; i++) {
-    const img = new Image();
-    img.src = `photos/${i}.jpg`;
-    img.alt = `Photo ${i}`;
+  photos.forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = src.split('/').pop();
     img.loading = 'lazy';
-
-    // Check if image exists by loading it
-    img.onerror = () => img.remove(); // remove if not exists
     gallery.appendChild(img);
-  }
+  });
 </script>
 
 </body>
 </html>
+
