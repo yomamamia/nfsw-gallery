@@ -7,24 +7,25 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+      margin: 20px;
       background: #f9f9f9;
     }
     h1 {
       text-align: center;
       color: #333;
-      margin: 20px 0;
+      margin-bottom: 20px;
     }
     .gallery {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 10px;
     }
     .gallery img {
-      width: 100%;      /* full width of page */
-      height: auto;     /* keep original aspect ratio */
-      margin-bottom: 20px;
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -36,13 +37,19 @@
 
 <script>
   const gallery = document.getElementById('gallery');
-  const totalPhotos = 10; // Replace with the total number of photos in your folder
 
-  for (let i = 1; i <= totalPhotos; i++) {
-    const img = document.createElement('img');
-    img.src = `photos/${i}.jpg`;  // your image filenames
+  // Automatically detect all images in the folder
+  // You must list them manually in an array since Cloudflare Pages is static
+  // But we can keep it minimal with a naming convention
+  const imageCount = 20; // approximate max number of images, adjust if needed
+  for (let i = 1; i <= imageCount; i++) {
+    const img = new Image();
+    img.src = `photos/${i}.jpg`;
     img.alt = `Photo ${i}`;
     img.loading = 'lazy';
+
+    // Check if image exists by loading it
+    img.onerror = () => img.remove(); // remove if not exists
     gallery.appendChild(img);
   }
 </script>
