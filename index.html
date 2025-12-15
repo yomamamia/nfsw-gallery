@@ -34,22 +34,16 @@
 <div class="gallery" id="gallery"></div>
 
 <script>
-  // List all images explicitly
-  const photos = [
-    'photos/,
-    
-    // Add all remaining images here
-  ];
-
   const gallery = document.getElementById('gallery');
+  const totalPhotos = 10; // Replace with the total number of photos in your folder
 
-  photos.forEach(src => {
+  for (let i = 1; i <= totalPhotos; i++) {
     const img = document.createElement('img');
-    img.src = src;
-    img.alt = src.split('/').pop();
+    img.src = `photos/${i}.jpg`; // your images must be named 1.jpg, 2.jpg, etc.
+    img.alt = `Photo ${i}`;
     img.loading = 'lazy';
     gallery.appendChild(img);
-  });
+  }
 </script>
 
 </body>
