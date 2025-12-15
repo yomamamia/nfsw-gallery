@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JAV Big Booties</title>
+  <title>Photo Gallery</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,20 +17,19 @@
       color: #333;
     }
 
-    #video-gallery {
+    #photo-gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
       margin-top: 30px;
     }
 
-    video {
+    #photo-gallery img {
       width: 100%;
-      max-width: 100%;
       height: auto;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      background: #000;
+      background: #fff;
     }
   </style>
 </head>
@@ -37,51 +37,53 @@
 
 <h1>Gallery</h1>
 
-<div id="video-gallery">
-  <!-- Videos will be loaded here -->
+<div id="photo-gallery">
+  <!-- Photos will be loaded here -->
 </div>
 
 <script>
-  const repoOwner = 'yomamamia';    // <-- CHANGE THIS
-  const repoName = 'nfsw-gallery';     // <-- CHANGE THIS
+  const repoOwner = 'yomamamia';
+  const repoName = 'nfsw-gallery';
 
-  // List all your video folders here:
+  // PHOTO FOLDERS
   const folderPaths = [
     'new 51',
     'new 58',
     'new 60',
-    'new 63',	
-  'more-videos',  // <-- add as many as you want
+    'new 63'
   ];
 
-  async function loadVideosFromFolder(folderPath) {
+  async function loadPhotosFromFolder(folderPath) {
     const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
     const res = await fetch(url);
     const files = await res.json();
-    
-    const gallery = document.getElementById('video-gallery');
+
+    const gallery = document.getElementById('photo-gallery');
 
     files.forEach(file => {
-      if (file.name.endsWith('.mp4')) {
-        const video = document.createElement('video');
-        video.controls = true;
-        const source = document.createElement('source');
-        source.src = file.download_url;
-        source.type = 'video/mp4';
-        video.appendChild(source);
-        gallery.appendChild(video);
+      if (
+        file.name.endsWith('.jpg') ||
+        file.name.endsWith('.jpeg') ||
+        file.name.endsWith('.png') ||
+        file.name.endsWith('.webp')
+      ) {
+        const img = document.createElement('img');
+        img.src = file.download_url;
+        img.loading = 'lazy';
+        gallery.appendChild(img);
       }
     });
   }
 
-  async function loadAllVideos() {
+  async function loadAllPhotos() {
     for (const folderPath of folderPaths) {
-      await loadVideosFromFolder(folderPath);
+      await loadPhotosFromFolder(folderPath);
     }
   }
 
-  loadAllVideos();
+  loadAllPhotos();
 </script>
 
 </body>
 </html>
+
