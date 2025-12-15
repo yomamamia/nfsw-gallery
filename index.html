@@ -5,10 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Photo Gallery</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 20px; }
-    h1 { text-align: center; color: #333; }
-    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 30px; }
-    .gallery img { width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .gallery img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
@@ -18,40 +34,23 @@
 <div class="gallery" id="gallery"></div>
 
 <script>
-  const folders = [
-    'photos',
-    'msh 001',
-    'new-60',
-    'new-63'
+  // List all images explicitly
+  const photos = [
+    'photos/,
+    
+    // Add all remaining images here
   ];
 
   const gallery = document.getElementById('gallery');
 
-  folders.forEach(folder => {
-    fetch(`photos/${folder}/`)
-      .then(res => res.text())
-      .then(html => {
-        // Parse directory listing
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const links = [...doc.querySelectorAll('a')]
-          .map(a => a.getAttribute('href'))
-          .filter(name => /\.(jpe?g|png|webp)$/i.test(name));
-
-        links.forEach(file => {
-          const img = document.createElement('img');
-          img.src = `photos/${folder}/${file}`;
-          img.alt = file;
-          img.loading = 'lazy';
-          gallery.appendChild(img);
-        });
-      })
-      .catch(err => console.log(`Could not load folder ${folder}:`, err));
+  photos.forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = src.split('/').pop();
+    img.loading = 'lazy';
+    gallery.appendChild(img);
   });
 </script>
 
 </body>
 </html>
-
-
-
