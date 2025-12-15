@@ -2,88 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Photo Gallery</title>
-
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f9f9f9;
       margin: 20px;
-      background-color: #f9f9f9;
     }
-
     h1 {
       text-align: center;
       color: #333;
     }
-
-    #photo-gallery {
+    .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 15px;
       margin-top: 30px;
     }
-
-    #photo-gallery img {
+    .gallery img {
       width: 100%;
-      height: auto;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      background: #fff;
     }
   </style>
 </head>
 <body>
 
-<h1>Gallery</h1>
+<h1>Photo Gallery</h1>
 
-<div id="photo-gallery">
-  <!-- Photos will be loaded here -->
-</div>
+<div class="gallery" id="gallery"></div>
 
 <script>
-  const repoOwner = 'yomamamia';
-  const repoName = 'nfsw-gallery';
+  const gallery = document.getElementById('gallery');
+  const totalPhotos = 10; // Replace with the total number of photos in your folder
 
-  // PHOTO FOLDERS
-  const folderPaths = [
-    'new 51',
-    'new 58',
-    'new 60',
-    'new 63'
-  ];
-
-  async function loadPhotosFromFolder(folderPath) {
-    const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
-    const res = await fetch(url);
-    const files = await res.json();
-
-    const gallery = document.getElementById('photo-gallery');
-
-    files.forEach(file => {
-      if (
-        file.name.endsWith('.jpg') ||
-        file.name.endsWith('.jpeg') ||
-        file.name.endsWith('.png') ||
-        file.name.endsWith('.webp')
-      ) {
-        const img = document.createElement('img');
-        img.src = file.download_url;
-        img.loading = 'lazy';
-        gallery.appendChild(img);
-      }
-    });
+  for (let i = 1; i <= totalPhotos; i++) {
+    const img = document.createElement('img');
+    img.src = `photos/${i}.jpg`; // your images must be named 1.jpg, 2.jpg, etc.
+    img.alt = `Photo ${i}`;
+    img.loading = 'lazy';
+    gallery.appendChild(img);
   }
-
-  async function loadAllPhotos() {
-    for (const folderPath of folderPaths) {
-      await loadPhotosFromFolder(folderPath);
-    }
-  }
-
-  loadAllPhotos();
 </script>
 
 </body>
 </html>
-
