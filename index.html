@@ -18,28 +18,40 @@
 <div class="gallery" id="gallery"></div>
 
 <script>
-  // List all your photo folders here
   const folders = [
     'photos',
     'msh 001',
+    'new-60',
+    'new-63'
   ];
 
   const gallery = document.getElementById('gallery');
 
   folders.forEach(folder => {
-    // Manually specify how many photos are in each folder
-    const photoCount = 5; // Replace 5 with actual number in folder
-    for (let i = 1; i <= photoCount; i++) {
-      const img = document.createElement('img');
-      img.src = `photos/${folder}/${i}.jpg`; // Ensure filenames are 1.jpg, 2.jpg, etc.
-      img.alt = `${folder} photo ${i}`;
-      img.loading = 'lazy';
-      gallery.appendChild(img);
-    }
+    fetch(`photos/${folder}/`)
+      .then(res => res.text())
+      .then(html => {
+        // Parse directory listing
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const links = [...doc.querySelectorAll('a')]
+          .map(a => a.getAttribute('href'))
+          .filter(name => /\.(jpe?g|png|webp)$/i.test(name));
+
+        links.forEach(file => {
+          const img = document.createElement('img');
+          img.src = `photos/${folder}/${file}`;
+          img.alt = file;
+          img.loading = 'lazy';
+          gallery.appendChild(img);
+        });
+      })
+      .catch(err => console.log(`Could not load folder ${folder}:`, err));
   });
 </script>
 
 </body>
 </html>
+
 
 
