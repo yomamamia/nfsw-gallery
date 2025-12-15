@@ -7,23 +7,24 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
       background: #f9f9f9;
-      margin: 20px;
     }
     h1 {
       text-align: center;
       color: #333;
+      margin: 20px 0;
     }
     .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 15px;
-      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .gallery img {
-      width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 100%;      /* full width of page */
+      height: auto;     /* keep original aspect ratio */
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -39,7 +40,7 @@
 
   for (let i = 1; i <= totalPhotos; i++) {
     const img = document.createElement('img');
-    img.src = `photos/${i}.jpg`; // your images must be named 1.jpg, 2.jpg, etc.
+    img.src = `photos/${i}.jpg`;  // your image filenames
     img.alt = `Photo ${i}`;
     img.loading = 'lazy';
     gallery.appendChild(img);
