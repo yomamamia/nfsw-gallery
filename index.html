@@ -7,23 +7,25 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
       margin: 20px;
+      background: #f9f9f9;
     }
     h1 {
       text-align: center;
       color: #333;
+      margin-bottom: 20px;
     }
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 15px;
-      margin-top: 30px;
+      padding: 10px;
     }
     .gallery img {
       width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      height: auto;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -33,18 +35,21 @@
 
 <div class="gallery" id="gallery"></div>
 
+<!-- Import the auto-generated array -->
+<script src="photos-array.js"></script>
+
 <script>
   const gallery = document.getElementById('gallery');
-  const totalPhotos = 10; // Replace with the total number of photos in your folder
 
-  for (let i = 1; i <= totalPhotos; i++) {
+  photos.forEach(src => {
     const img = document.createElement('img');
-    img.src = `photos/${i}.jpg`; // your images must be named 1.jpg, 2.jpg, etc.
-    img.alt = `Photo ${i}`;
+    img.src = src;
+    img.alt = src.split('/').pop();
     img.loading = 'lazy';
     gallery.appendChild(img);
-  }
+  });
 </script>
 
 </body>
 </html>
+
